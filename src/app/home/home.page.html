@@ -7,9 +7,30 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-slides [options]="config">
-    <ion-slide *ngFor="let item of dataset">
-      <app-itemdetails></app-itemdetails>
-    </ion-slide>
-  </ion-slides>
+  <ion-row>
+
+    <ion-slides [options]="config">
+      <ion-slide *ngFor="let item of datasetHZ">
+        <app-itemdetails [email]='item.email' [name]='item.first_name' [prifileImage]='item.avatar'></app-itemdetails>
+      </ion-slide>
+    </ion-slides>
+
+  </ion-row>
+
+  <ion-item *ngFor="let item of dataset">
+    <ion-avatar slot="start">
+      <img [src]="item.avatar">
+    </ion-avatar>
+    <ion-label>
+      <h4 class="pull-right">{{item.Emp_id }}</h4>
+      <h2>{{item.first_name}}</h2>
+      <h3>{{item.email}}</h3>
+
+    </ion-label>
+  </ion-item>
+
+  <ion-infinite-scroll threshold="5px" (ionInfinite)="loadInfiniteData($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

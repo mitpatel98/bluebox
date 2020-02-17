@@ -1,4 +1,6 @@
+import { DataGetterService } from './../services/dataGetter/data-getter.service';
 import { Component } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -7,70 +9,51 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  config={
+  config = {
     spaceBetween: 10,
     centeredSlides: true,
     slidesPerView: 1.6
   }
-  dataset:any= [
-    {
-      "name": "ABCD pate",
-      "age": "24",
-      "profileImage": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png",
-      "department": "IT",
-      "email": "test78@gmail.com",
-      "Emp_id": "23490"
-    },
-    {
-      "name": "ABCD pate",
-      "age": "24",
-      "profileImage": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png",
-      "department": "IT",
-      "email": "test78@gmail.com",
-      "Emp_id": "23490"
-    },
-    {
-      "name": "ABCD pate",
-      "age": "24",
-      "profileImage": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png",
-      "department": "IT",
-      "email": "test78@gmail.com",
-      "Emp_id": "23490"
-    },
-    {
-      "name": "ABCD pate",
-      "age": "24",
-      "profileImage": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png",
-      "department": "IT",
-      "email": "test78@gmail.com",
-      "Emp_id": "23490"
-    },
-    {
-      "name": "ABCD pate",
-      "age": "24",
-      "profileImage": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png",
-      "department": "IT",
-      "email": "test78@gmail.com",
-      "Emp_id": "23490"
-    },
-    {
-      "name": "ABCD pate",
-      "age": "24",
-      "profileImage": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png",
-      "department": "IT",
-      "email": "test78@gmail.com",
-      "Emp_id": "23490"
-    },
-    {
-      "name": "ABCD pate",
-      "age": "24",
-      "profileImage": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png",
-      "department": "IT",
-      "email": "test78@gmail.com",
-      "Emp_id": "23490"
-    }
-  ]
+  page = 0;
+  totalPage = 0;
+  dataset: any = []
+  datasetHZ: any = [];
+  constructor(public datagetter: DataGetterService, public loadingController: LoadingController) { }
 
-  constructor() { }
+  ionViewDidEnter() {
+    this.getUser();
+  }
+
+  async getUser(event?) {
+    const loading = await this.loadingController.create({
+      message: 'Please wait While faching data..',
+    });
+    await loading.present()
+    this.datagetter.getUser(this.page).subscribe((respons: any) => {
+      loading.dismiss();
+      this.totalPage = respons.total_pages;
+      if (this.page === 0) {
+        this.page++;
+        this.datasetHZ = respons.data;
+        this.getUser();
+      } else {
+        this.dataset = this.dataset.concat(respons.data);
+      }
+      if (event) {
+        event.target.complete()
+      }
+    }, (error: any) => {
+      loading.dismiss();
+      alert('error in geting respons');
+    });
+
+  }
+  loadInfiniteData(event) {
+    this.page++;
+    this.getUser(event);
+    if (this.page === this.totalPage) {
+      event.target.disabled = true
+    }
+  }
 
 }

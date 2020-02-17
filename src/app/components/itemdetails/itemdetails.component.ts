@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-itemdetails',
@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./itemdetails.component.scss'],
 })
 export class ItemdetailsComponent implements OnInit {
-  
+  @Input() email:any;
+  @Input() name:any;
+  @Input() prifileImage:any;
 
   constructor() { 
     console.log('###');
