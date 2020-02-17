@@ -11,12 +11,12 @@ export class ItemdetailsComponent implements OnInit {
   @Input() prifileImage:any;
 
   constructor() { 
-    console.log('###');
+   
     
   }
 
   ngOnInit() {
-    console.log('###');
+
   }
 
 }
